@@ -1,6 +1,6 @@
 {
   "name": "mailclerk.dedsec.cl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "author": "",
   "private": true,
@@ -24,7 +24,6 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^6.4.1",
-    "@prisma/extension-accelerate": "^1.2.2",
     "prisma": "^6.4.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
