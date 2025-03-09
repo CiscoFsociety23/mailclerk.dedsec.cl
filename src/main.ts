@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { MailclerkModule } from './modules/mailclerk.module';
+import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(MailclerkModule);
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT ?? 2500);
 };
 bootstrap();
