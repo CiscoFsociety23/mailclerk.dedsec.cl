@@ -26,13 +26,13 @@ jobs:
         run: |
           echo 'DATABASE_URL=${{ secrets.DATABASE_URL }}' > ./.env
 
-      - name: Migrando base de datos a Prisma Postgres
+      - name: Migrando base de datos a Supabase Postgres
         run: |
           npx prisma migrate deploy
 
       - name: Conectando a la base de datos
         run: |
-          npx prisma generate --no-engine
+          npx prisma generate
 
       - name: Compilando la aplicación
         run: |

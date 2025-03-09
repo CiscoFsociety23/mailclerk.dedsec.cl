@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { withAccelerate } from '@prisma/extension-accelerate';
 import { PropertyUtil } from '../utils/property.util';
 import { ServiceInformation, ServiceList } from '../interfaces/mailclerk.interface';
 
@@ -10,7 +9,7 @@ export class MailclerkService {
   private logger: Logger = new Logger(MailclerkService.name);
   private property: PropertyUtil = new PropertyUtil();
   private serviceList: ServiceList[] = new Array<ServiceList>();
-  private prisma = new PrismaClient().$extends(withAccelerate());
+  private prisma: PrismaClient = new PrismaClient();
 
   public async getServerIformacion(): Promise<ServiceInformation> {
     try {
