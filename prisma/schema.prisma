@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model property {
+  id    Int    @id @default(autoincrement())
+  key   String @db.VarChar(255) @unique
+  value String @db.Text
+}
+
+model status {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255) @unique
+  serviceStatus serviceStatus[]
+}
+
+model serviceStatus {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(255) @unique
+  id_status Int
+  status    status @relation(fields: [id_status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "servicestatus_ibfk_1")
+
+  @@index([id_status], map: "id_status")
+}

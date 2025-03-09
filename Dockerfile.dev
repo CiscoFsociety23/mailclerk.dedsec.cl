@@ -1,0 +1,8 @@
+FROM node:slim
+
+WORKDIR /mailclerk.dedsec.cl
+ENV TZ=America/Santiago=value
+RUN apt-get update && apt-get install -y procps openssl && rm -rf /var/lib/apt/lists/*
+EXPOSE 2500
+
+CMD ["npm", "run", "start:dev"]
