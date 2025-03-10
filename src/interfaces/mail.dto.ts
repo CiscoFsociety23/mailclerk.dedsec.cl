@@ -13,3 +13,11 @@ export class MessageEmailDTO {
     @IsString()
     content: string;
 };
+
+export class WelcomeEmailDTO {
+    @IsString()
+    name: string;
+    
+    @IsEmail()
+    reciever: string;
+};
