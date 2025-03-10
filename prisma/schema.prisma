@@ -4,26 +4,42 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model property {
-  id    Int    @id @default(autoincrement())
-  key   String @db.VarChar(255) @unique
+  id Int @id @default(autoincrement())
+  key String @db.VarChar(255) @unique
   value String @db.Text
 }
 
 model status {
-  id            Int             @id @default(autoincrement())
-  name          String          @db.VarChar(255) @unique
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255) @unique
   serviceStatus serviceStatus[]
 }
 
 model serviceStatus {
-  id        Int    @id @default(autoincrement())
-  name      String @db.VarChar(255) @unique
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255) @unique
   id_status Int
-  status    status @relation(fields: [id_status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "servicestatus_ibfk_1")
-
+  status status @relation(fields: [id_status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "servicestatus_ibfk_1")
   @@index([id_status], map: "id_status")
+}
+
+model layout {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255) @unique
+  layoutB64 String @db.Text
+  registroEnvio sendRecord[]
+}
+
+model sendRecord {
+  id Int @id @default(autoincrement())
+  idLayout Int
+  name String @db.VarChar(255)
+  email String @db.VarChar(255)
+  subject String @db.VarChar(255)
+  layout layout @relation(fields: [idLayout], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sendrecord_ibfk_1")
+  @@index([idLayout], map: "idLayout")
 }
