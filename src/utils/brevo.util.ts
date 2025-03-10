@@ -1,7 +1,7 @@
 import * as brevo from '@getbrevo/brevo';
 import { Logger } from '@nestjs/common';
 import { PropertyUtil } from './property.util';
-import { MessageEmailDTO, WelcomeEmailDTO } from '../interfaces/mail.dto';
+import { MessageEmailDTO, WelcomeEmailDTO, ValidationEmailDTO } from '../interfaces/mail.dto';
 import { LayoutUtil } from '../utils/layout.util';
 import { Layout } from 'src/interfaces/mail.interface';
 
@@ -64,6 +64,28 @@ export class BrevoUtil {
             return { layout, status: true };
         } catch (error) {
             this.logger.error(`[ sendWelcomeEmail() ]: Ha ocurrido un error al eviar el correo ${error.message}`);
+            throw error;
+        };
+    };
+
+    public async sendValidationEmail(emailData: ValidationEmailDTO): Promise<{layout:Layout, status:boolean}> {
+        try {
+            this.logger.log(`[ sendValidationEmail() ]: Enviando correo a: ${emailData.reciever}`);
+            await this.setApiKey();
+            this.email.sender = { name: 'Dedsec Corp', email: 'no-reply@dedsec.cl' };
+            this.email.subject = "Validacion Dedsec Corp";
+            this.email.to = [{ name: emailData.name, email: emailData.reciever }];
+            this.logger.log(`[ sendValidationEmail() ]: Configurando plantilla`);
+            const layout = await this.layoutUtil.getLayout('Validation Layout');
+            const layoutHTML = atob(layout.layoutB64);
+            const dataMail = { '{URL_VALIDATION}': emailData.validationUrl };
+            const htmlContent = Object.entries(dataMail).reduce((html, [key, value]) => html.replace(new RegExp(key, 'g'), value), layoutHTML);
+            this.email.htmlContent = htmlContent;
+            await this.brevoInstance.sendTransacEmail(this.email);
+            this.logger.log(`[ sendValidationEmail() ]: Correo enviado con asunto ${this.email.subject}`);
+            return { layout, status: true };
+        } catch (error) {
+            this.logger.error(`[ sendValidationEmail() ]: Ha ocurrido un error al eviar el correo ${error.message}`);
             throw error;
         };
     };

@@ -21,3 +21,14 @@ export class WelcomeEmailDTO {
     @IsEmail()
     reciever: string;
 };
+
+export class ValidationEmailDTO {
+    @IsString()
+    name: string;
+    
+    @IsEmail()
+    reciever: string;
+
+    @IsString()
+    validationUrl: string
+};
