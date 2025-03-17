@@ -1,8 +1,9 @@
-import { Controller, Logger, Req, Res, Post, Body } from "@nestjs/common";
+import { Controller, Logger, Req, Res, Post, Body, UseGuards } from "@nestjs/common";
 import { Request, Response } from "express";
 import { MessageEmailDTO, ValidationEmailDTO, WelcomeEmailDTO } from "../interfaces/mail.dto";
 import { BrevoUtil } from "../utils/brevo.util";
 import { MailService } from "../services/mail.service";
+import { AuthGuard } from "../guards/mail.guard";
 
 @Controller('api-mailclerk/mail')
 export class MailController {
@@ -12,6 +13,7 @@ export class MailController {
     constructor(private mailService: MailService) {};
 
     @Post('message')
+    @UseGuards(AuthGuard)
     public async sendMessageEmail(@Req() request: Request, @Res() response: Response, @Body() emailData: MessageEmailDTO): Promise<void> {
         try {
             this.logger.log(`[ POST ${request.url} ]: Solicitando enviar correo a: ${emailData.name} ${emailData.reciever}`);
@@ -29,6 +31,7 @@ export class MailController {
     };
 
     @Post('welcome')
+    @UseGuards(AuthGuard)
     public async sendWelcomeEmail(@Req() request: Request, @Res() response: Response, @Body() emailData: WelcomeEmailDTO): Promise<void> {
         try {
             this.logger.log(`[ POST ${request.url} ]: Solicitando enviar correo a: ${emailData.name} ${emailData.reciever}`);
@@ -46,6 +49,7 @@ export class MailController {
     };
 
     @Post('validation')
+    @UseGuards(AuthGuard)
     public async sendValidationEmail(@Req() request: Request, @Res() response: Response, @Body() emailData: ValidationEmailDTO): Promise<void> {
         try {
             this.logger.log(`[ POST ${request.url} ]: Solicitando enviar correo a: ${emailData.name} ${emailData.reciever}`);
